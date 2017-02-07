@@ -1,13 +1,13 @@
 "use strict";
 var sqlite = require("sqlite3");
 var db = new sqlite.Database("./results.db");
-var createResultsTable = "\n  CREATE TABLE IF NOT EXISTS results (\n    download REAL,\n    upload REAL,\n    ping REAL,\n    ip TEXT,\n    isp TEXT,\n    host TEXT,\n    type TEXT,\n    measuredAt TEXT\n  )\n";
-var insertResultSql = "\n  INSERT INTO results (download, upload, ping, ip, isp, host, type, measuredAt)\n  VALUES ($download, $upload, $ping, $ip, $isp, $host, $type, $measured_at)\n";
+var createResultsTable = "\n  CREATE TABLE IF NOT EXISTS results (\n    download REAL,\n    upload REAL,\n    ping REAL,\n    ip TEXT,\n    isp TEXT,\n    host TEXT,\n    measuredAt TEXT\n  )\n";
+var insertResultSql = "\n  INSERT INTO results (download, upload, ping, ip, isp, host, measuredAt)\n  VALUES ($download, $upload, $ping, $ip, $isp, $host, $measured_at)\n";
 db.run(createResultsTable);
 var Result = (function () {
     function Result(fields) {
         if (fields === void 0) { fields = {}; }
-        var download = fields.download, upload = fields.upload, ping = fields.ping, ip = fields.ip, isp = fields.isp, host = fields.host, type = fields.type;
+        var download = fields.download, upload = fields.upload, ping = fields.ping, ip = fields.ip, isp = fields.isp, host = fields.host;
         var measuredAt = fields.measuredAt ? new Date(fields.measuredAt) : new Date;
         this.download = Number(download);
         this.upload = Number(upload);
@@ -15,7 +15,6 @@ var Result = (function () {
         this.ip = ip;
         this.isp = isp;
         this.host = host;
-        this.type = type;
         this.measuredAt = measuredAt;
     }
     Result.selectAll = function () {
@@ -40,7 +39,6 @@ var Result = (function () {
             "$ip": this.ip,
             "$isp": this.isp,
             "$host": this.host,
-            "$type": this.type,
             "$measured_at": this.measuredAt.toISOString()
         });
     };

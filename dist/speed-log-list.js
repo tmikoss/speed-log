@@ -34,8 +34,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var program = require("commander");
 var database_1 = require("./database");
 var display_1 = require("./display");
+program
+    .option('-v, --verbose', 'display all saved data')
+    .parse(process.argv);
 function selectAndPrint() {
     return __awaiter(this, void 0, void 0, function () {
         var results;
@@ -44,7 +48,7 @@ function selectAndPrint() {
                 case 0: return [4 /*yield*/, database_1.Result.selectAll()];
                 case 1:
                     results = _a.sent();
-                    console.log(display_1.resultsAsTable(results));
+                    console.log(display_1.resultsAsTable(results, program.verbose));
                     return [2 /*return*/];
             }
         });

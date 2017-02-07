@@ -10,14 +10,13 @@ const createResultsTable = `
     ip TEXT,
     isp TEXT,
     host TEXT,
-    type TEXT,
     measuredAt TEXT
   )
 `
 
 const insertResultSql = `
-  INSERT INTO results (download, upload, ping, ip, isp, host, type, measuredAt)
-  VALUES ($download, $upload, $ping, $ip, $isp, $host, $type, $measured_at)
+  INSERT INTO results (download, upload, ping, ip, isp, host, measuredAt)
+  VALUES ($download, $upload, $ping, $ip, $isp, $host, $measured_at)
 `
 
 db.run(createResultsTable)
@@ -29,11 +28,10 @@ export class Result {
   ip: string
   isp: string
   host: string
-  type: string
   measuredAt?: Date
 
   constructor(fields: any = {}){
-    const { download, upload, ping, ip, isp, host, type } = fields
+    const { download, upload, ping, ip, isp, host } = fields
     const measuredAt = fields.measuredAt ? new Date(fields.measuredAt) : new Date
 
     this.download = Number(download)
@@ -42,7 +40,6 @@ export class Result {
     this.ip = ip
     this.isp = isp
     this.host = host
-    this.type = type
     this.measuredAt = measuredAt
   }
 
@@ -71,7 +68,6 @@ export class Result {
       "$ip": this.ip,
       "$isp": this.isp,
       "$host": this.host,
-      "$type": this.type,
       "$measured_at": this.measuredAt.toISOString()
     })
   }
