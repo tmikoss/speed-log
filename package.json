@@ -1,0 +1,22 @@
+{
+  "name": "speed-log",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsc -w"
+  },
+  "bin": "./dist/speed-log.js",
+  "author": "Toms Mikoss",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^7.0.5",
+    "@types/sqlite3": "^2.2.32",
+    "typescript": "^2.1.5"
+  },
+  "dependencies": {
+    "commander": "^2.9.0",
+    "easy-table": "^1.0.0",
+    "moment": "^2.17.1",
+    "speedtest-net": "^1.2.12",
+    "sqlite3": "^3.1.8"
+  }
+}
