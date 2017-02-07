@@ -46,7 +46,6 @@ var Result = (function () {
         });
     };
     Result.prototype.persist = function () {
-        this.measuredAt = this.measuredAt || new Date;
         db.run(insertResultSql, {
             "$download": this.download,
             "$upload": this.upload,

@@ -82,8 +82,6 @@ export class Result {
   }
 
   persist() {
-    this.measuredAt = this.measuredAt || new Date
-
     db.run(insertResultSql, {
       "$download": this.download,
       "$upload": this.upload,
