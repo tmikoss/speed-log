@@ -7,6 +7,10 @@
   "bin": "./dist/speed-log.js",
   "author": "Toms Mikoss",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmikoss/speed-log"
+  },
   "devDependencies": {
     "@types/node": "^7.0.5",
     "@types/sqlite3": "^2.2.32",
