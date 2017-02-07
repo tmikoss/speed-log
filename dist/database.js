@@ -17,16 +17,31 @@ var Result = (function () {
         this.host = host;
         this.measuredAt = measuredAt;
     }
-    Result.selectAll = function () {
+    Result.selectAll = function (_a) {
+        var _b = _a === void 0 ? {} : _a, maxDownload = _b.maxDownload, maxUpload = _b.maxUpload, minPing = _b.minPing;
+        var query = "SELECT * FROM results WHERE 1=1";
+        var queryParams = {};
+        if (maxDownload) {
+            query += " AND download <= $maxDownload";
+            queryParams['$maxDownload'] = maxDownload;
+        }
+        if (maxUpload) {
+            query += " AND upload <= $maxUpload";
+            queryParams['$maxUpload'] = maxUpload;
+        }
+        if (minPing) {
+            query += " AND ping >= $minPing";
+            queryParams['$minPing'] = minPing;
+        }
+        query += " ORDER BY measuredAt DESC";
         return new Promise(function (resolve, reject) {
-            db.all("SELECT * FROM results ORDER BY measuredAt DESC", function (err, rows) {
+            db.all(query, queryParams, function (err, rows) {
                 if (err) {
                     reject(err);
-                    return;
                 }
-                resolve(rows.map(function (row) {
-                    return new Result(row);
-                }));
+                else {
+                    resolve(rows.map(function (row) { return new Result(row); }));
+                }
             });
         });
     };

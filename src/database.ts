@@ -21,6 +21,12 @@ const insertResultSql = `
 
 db.run(createResultsTable)
 
+interface ISelectAll {
+  maxDownload?: number
+  maxUpload?: number
+  minPing?: number
+}
+
 export class Result {
   download: number
   upload: number
@@ -43,17 +49,34 @@ export class Result {
     this.measuredAt = measuredAt
   }
 
-  static selectAll(): Promise<Result[]> {
+  static selectAll({ maxDownload, maxUpload, minPing }: ISelectAll = {}): Promise<Result[]> {
+    let query = "SELECT * FROM results WHERE 1=1"
+    const queryParams = {}
+
+    if(maxDownload){
+      query += " AND download <= $maxDownload"
+      queryParams['$maxDownload'] = maxDownload
+    }
+
+    if (maxUpload) {
+      query += " AND upload <= $maxUpload"
+      queryParams['$maxUpload'] = maxUpload
+    }
+
+    if (minPing) {
+      query += " AND ping >= $minPing"
+      queryParams['$minPing'] = minPing
+    }
+
+    query += " ORDER BY measuredAt DESC"
+
     return new Promise<Result[]>((resolve, reject) => {
-      db.all("SELECT * FROM results ORDER BY measuredAt DESC", (err, rows) => {
+      db.all(query, queryParams, (err, rows) => {
         if(err) {
           reject(err)
-          return
+        } else {
+          resolve(rows.map(row => new Result(row)))
         }
-
-        resolve(rows.map(row => {
-          return new Result(row)
-        })
       })
     })
   }

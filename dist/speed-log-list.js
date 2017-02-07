@@ -38,14 +38,21 @@ var program = require("commander");
 var database_1 = require("./database");
 var display_1 = require("./display");
 program
-    .option('-v, --verbose', 'display all saved data')
+    .option('-v, --verbose', 'display extended data')
+    .option('-d, --download [mbit]', 'only results where download speed is below this value', Number)
+    .option('-u, --upload [mbit]', 'only results where upload speed is below this value', Number)
+    .option('-p, --ping [ms]', 'only results where ping is above this value', Number)
     .parse(process.argv);
 function selectAndPrint() {
     return __awaiter(this, void 0, void 0, function () {
         var results;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, database_1.Result.selectAll()];
+                case 0: return [4 /*yield*/, database_1.Result.selectAll({
+                        maxDownload: program.download,
+                        maxUpload: program.upload,
+                        minPing: program.ping
+                    })];
                 case 1:
                     results = _a.sent();
                     console.log(display_1.resultsAsTable(results, program.verbose));
